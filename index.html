@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Hope for Humanity</title>
+
+  <style>
+    *{
+      box-sizing:border-box;
+    }
+
+    html{
+      scroll-behavior:smooth;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0f172a, #1e2937);
+      color: #fff;
+    }
+
+    a{
+      color:inherit;
+    }
+
+    /* Loader */
+    #loader{
+      position:fixed;
+      inset:0;
+      background:#0f172a;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      z-index:99999;
+    }
+
+    .spinner{
+      width:70px;
+      height:70px;
+      border:6px solid #334155;
+      border-top:6px solid #22d3ee;
+      border-radius:50%;
+      animation:spin 1s linear infinite;
+    }
+
+    @keyframes spin{
+      to{
+        transform:rotate(360deg);
+      }
+    }
+
+    /* Navbar */
+    nav{
+      background:#020617;
+      padding:10px;
+      position:sticky;
+      top:0;
+      z-index:9999;
+      border-bottom:1px solid rgba(255,255,255,0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .nav-container{
+      display:flex;
+      justify-content:center;
+      gap:20px;
+      flex-wrap:wrap;
+    }
+
+    nav a{
+      text-decoration:none;
+      color:#fff;
+      font-weight:600;
+      transition:0.3s;
+      cursor:pointer;
+    }
+
+    nav a:hover{
+      color:#22d3ee;
+    }
+
+    /* Running Message */
+    .running-message {
+      background: #22d3ee;
+      color: #0f172a;
+      padding: 3px 0;
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 100;
+    }
+
+    .running-message span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 25s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      height: 290px;
+      margin: 35px auto;
+      overflow: hidden;
+      background: #000;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      border: 3px solid rgba(34, 211, 238, 0.3);
+    }
+
+    .slider {
+      display: flex;
+      transition: transform 1.2s ease-in-out;
+      height: 100%;
+    }
+
+    .slide {
+      min-width: 100%;
+      height: 100%;
+      position: relative;
+    }
+
+    .slide img,
+    .slide video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 65%, rgba(15,23,42,0.75) 100%);
+    }
+
+    .slide-text {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 3;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      max-width: 80%;
+    }
+
+    .slide-text h2 {
+      font-size: 1.35rem;
+      margin: 0;
+      font-weight: 600;
+      color: #67e8f9;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 20px auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    h1 {
+      color: #22d3ee;
+      font-size: 2.8rem;
+      margin-bottom: 10px;
+    }
+
+    h2{
+      font-size:2rem;
+    }
+
+    .progress-container {
+      max-width: 720px;
+      margin: 25px auto;
+      background: #1e2937;
+      border-radius: 10px;
+      padding: 1px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+
+    .progress-bar {
+      height: 18px;
+      background: linear-gradient(90deg, #22d3ee, #67e8f9);
+      border-radius: 50px;
+      transition: width 1.8s ease;
+    }
+
+    .progress-text {
+      display: flex;
+      justify-content: center;
+      margin-top: 8px;
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .motivational-text {
+      font-size: 1.28rem;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 25px auto;
+      opacity: 0.95;
+    }
+
+    .donate-btn {
+      background: #22d3ee;
+      color: #0f172a;
+      font-size: 1.5rem;
+      padding: 16px 55px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      margin: 25px 0 10px;
+      font-weight: bold;
+      transition:0.3s;
+    }
+
+    .donate-btn:hover {
+      background: #67e8f9;
+      transform: scale(1.05);
+    }
+
+    .security-text{
+      opacity:0.85;
+      font-size:1rem;
+    }
+
+    .work-section,
+    .contact-section {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .work-card {
+      background: #1e2937;
+      border-radius: 12px;
+      padding: 18px;
+      text-align: left;
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border:1px solid rgba(255,255,255,0.05);
+    }
+
+    .work-card:hover{
+      transform: translateY(-8px);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+
+    .work-card h3 {
+      color: #67e8f9;
+      margin-top: 0;
+    }
+
+    .notification {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #14532d;
+      border-left: 5px solid #22c55e;
+      color: #fff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      display: none;
+      z-index: 1000;
+      max-width: 340px;
+    }
+
+    .qr-code img {
+      width: 200px;
+      height: auto;
+      display: block;
+      margin: 15px auto 0;
+      border: 2px solid #334155;
+      border-radius: 8px;
+    }
+
+    .donation-form {
+      background: #1e2937;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: left;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #334155;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+
+    .submit-btn {
+      background: #22d3ee;
+      color: #0f172a;
+      padding: 14px 40px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .address{
+      background:#0f172a;
+      padding:15px;
+      border-radius:10px;
+      word-break:break-all;
+      margin-top:15px;
+    }
+
+    .copy-btn{
+      background:#22d3ee;
+      border:none;
+      padding:8px 16px;
+      border-radius:30px;
+      margin-left:10px;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    footer{
+      background:#020617;
+      padding:30px 20px;
+      margin-top:50px;
+      text-align:center;
+      border-top:1px solid #334155;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- NAVBAR ACTIVE ON BOTH PAGES -->
+  <nav>
+    <div class="nav-container">
+
+      <a onclick="showMain()">Home</a>
+
+      <a onclick="showMainAndScroll('projects')">
+        Projects
+      </a>
+
+      <a onclick="showMainAndScroll('about')">
+        About
+      </a>
+
+      <a onclick="showPayment()">
+        Donate
+      </a>
+
+      <a onclick="showMainAndScroll('contact')">
+        Contact
+      </a>
+
+    </div>
+  </nav>
+
+  <!-- Running Message -->
+  <div class="running-message">
+    <span>
+      Welcome to HOPE FOR HUMANITY ● Together, we turn compassion into real change ● Thank you for being here. Your presence already brings light
+    </span>
+  </div>
+
+  <!-- MAIN SECTION -->
+  <div id="main-section">
+
+    <div class="slider-container">
+      <div class="slider" id="slider"></div>
+    </div>
+
+    <div class="container" id="about">
+
+      <h1>Hope for Humanity</h1>
+
+      <div class="progress-container">
+        <div class="progress-bar" style="width:42%"></div>
+
+        <div class="progress-text">
+          <span><strong>$42,000</strong> raised of <strong>$100,000</strong> goal</span>
+        </div>
+      </div>
+
+      <div class="work-grid" style="margin-top:40px;">
+        <div class="work-card" style="text-align:center;">
+          <h2 style="color:#22d3ee;">18,500+</h2>
+          <p>Lives Impacted</p>
+        </div>
+
+        <div class="work-card" style="text-align:center;">
+          <h2 style="color:#22d3ee;">27</h2>
+          <p>Active Communities</p>
+        </div>
+
+        <div class="work-card" style="text-align:center;">
+          <h2 style="color:#22d3ee;">145</h2>
+          <p>Volunteers Worldwide</p>
+        </div>
+      </div>
+
+      <p class="motivational-text">
+        Every day, millions of children and families face unimaginable suffering.
+        <strong>Your donation today can save lives.</strong>
+      </p>
+
+      <button class="donate-btn" onclick="showPayment()">
+        DONATE NOW
+      </button>
+
+      <p class="security-text">
+        🔒 Secure Blockchain Donations • Transparent Transactions
+      </p>
+
+    </div>
+
+    <!-- Projects -->
+    <div class="work-section container" id="projects">
+
+      <h2 style="color:#67e8f9;">Our Work So Far</h2>
+
+      <div class="work-grid">
+
+        <div class="work-card">
+          <h3>✅ Water Boreholes</h3>
+          <p>Provided clean water to rural communities.</p>
+        </div>
+
+        <div class="work-card">
+          <h3>✅ Emergency Food Aid</h3>
+          <p>Distributed food supplies to affected families.</p>
+        </div>
+
+        <div class="work-card">
+          <h3>✅ Medical Support</h3>
+          <p>Supported mobile clinics in refugee camps.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-section container" id="contact">
+
+      <h2 style="color:#67e8f9;">Get In Touch</h2>
+
+      <p>📍 25 Humanity Street, London, United Kingdom</p>
+
+      <p>🏛 NGO Registration No: HFH-2026-UK-1192</p>
+
+      <p>
+        📧 hopeforhumanity.uk@gmail.com
+      </p>
+
+    </div>
+
+  </div>
+
+<!-- PAYMENT SECTION -->
+<div id="payment-section" style="display:none;">
+
+  <div class="container">
+
+    <h1>Make Your Crypto Donation</h1>
+
+    <p style="font-size:1.25rem;">
+      Thank you for supporting <strong>Hope for Humanity</strong>.
+      <br>
+      Your donation goes directly to humanitarian projects.
+    </p>
+
+    <!-- Donation Form -->
+    <div class="donation-form">
+
+      <h3 style="color:#67e8f9;">Record Your Donation</h3>
+
+      <p style="margin-bottom:20px; opacity:0.9;">
+        Please fill this form after making your payment for accountability and transparency.
+      </p>
+
+      <div class="form-group">
+        <label for="name">Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name">
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" placeholder="Enter your email">
+      </div>
+
+      <div class="form-group">
+        <label for="amount">Amount Paid (USD)</label>
+        <input type="text" id="amount" placeholder="e.g. 150">
+      </div>
+
+      <button onclick="submitDonation()" class="submit-btn">
+        Submit Donation Record
+      </button>
+
+    </div>
+
+    <!-- ================= BTC ================= -->
+    <div style="background:#1e2937; border-radius:12px; padding:25px; margin:25px auto; max-width:600px; text-align:left;">
+
+      <h3>Bitcoin (BTC)</h3>
+
+      <div class="address" id="btc-address">
+        bc1qx832k7sax2l8v2mvdwdc3htgxazlnymlcm78m3
+
+        <button class="copy-btn" onclick="copyAddress('btc-address')">
+          Copy
+        </button>
+      </div>
+
+      <div class="qr-code">
+        <img
+          src="https://raw.githubusercontent.com/Rextabby/Video-and-images/main/btc.jpg"
+          alt="BTC QR Code"
+        >
+      </div>
+
+    </div>
+
+    <!-- ================= ETH ================= -->
+    <div style="background:#1e2937; border-radius:12px; padding:25px; margin:25px auto; max-width:600px; text-align:left;">
+
+      <h3>Ethereum (ETH)</h3>
+
+      <div class="address" id="eth-address">
+        0xe516f668601CfE869BF861D215c37EF14DDcCc59
+
+        <button class="copy-btn" onclick="copyAddress('eth-address')">
+          Copy
+        </button>
+      </div>
+
+      <div class="qr-code">
+        <img
+          src="https://raw.githubusercontent.com/Rextabby/Video-and-images/main/eth.jpg"
+          alt="ETH QR Code"
+        >
+      </div>
+
+    </div>
+
+    <!-- ================= USDT ================= -->
+    <div style="background:#1e2937; border-radius:12px; padding:25px; margin:25px auto; max-width:600px; text-align:left;">
+
+      <h3>Tether (USDT)</h3>
+
+      <h3>BNB Smart Chain (BEP20)</h3>
+
+      <div class="address" id="usdt-address">
+        0xe516f668601cfe869bf861d215c37ef14ddccc59
+
+        <button class="copy-btn" onclick="copyAddress('usdt-address')">
+          Copy
+        </button>
+      </div>
+
+      <div class="qr-code">
+        <img
+          src="https://raw.githubusercontent.com/Rextabby/Video-and-images/main/usdt.jpg"
+          alt="USDT QR Code"
+        >
+      </div>
+
+    </div>
+
+    <!-- Back Button -->
+    <button
+      onclick="showMain()"
+      style="
+        background:#64748b;
+        color:white;
+        padding:12px 30px;
+        border:none;
+        border-radius:50px;
+        cursor:pointer;
+        margin-top:20px;
+      "
+    >
+      ← Back to Home
+    </button>
+
+  </div>
+
+</div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification">
+    <strong id="donor-name"></strong>
+    donated
+    <strong id="donor-amount"></strong>
+  </div>
+
+  <!-- Footer -->
+  <footer>
+
+    <h3 style="color:#67e8f9;">Hope for Humanity</h3>
+
+    <p>
+      Together, we provide emergency aid, clean water, education,
+      and hope to vulnerable communities around the world.
+    </p>
+
+    <p>
+      © 2026 Hope for Humanity. All Rights Reserved.
+    </p>
+
+  </footer>
+
+  <script>
+
+    // Loader
+    window.addEventListener('load', () => {
+      document.getElementById('loader').style.display = 'none';
+    });
+
+    // Slider
+    const slides = [
+      {
+        type: "image",
+        url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/ima2.jpeg",
+        title: "Feeding Hungry Children"
+      },
+      {
+        type: "image",
+        url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/ima5.jpeg",
+        title: "Clean Water Boreholes"
+      }
+    ];
+
+    function createSlides() {
+
+      const slider = document.getElementById('slider');
+
+      slides.forEach(slide => {
+
+        const div = document.createElement('div');
+
+        div.className = 'slide';
+
+        div.innerHTML = `
+          <img src="${slide.url}" alt="${slide.title}">
+          <div class="slide-text">
+            <h2>${slide.title}</h2>
+          </div>
+        `;
+
+        slider.appendChild(div);
+
+      });
+    }
+
+    let currentSlide = 0;
+
+    function nextSlide() {
+
+      currentSlide = (currentSlide + 1) % slides.length;
+
+      document.getElementById('slider').style.transform =
+        `translateX(-${currentSlide * 100}%)`;
+
+    }
+
+    createSlides();
+
+    setInterval(nextSlide, 5000);
+
+    // NAVIGATION FUNCTIONS
+    function showPayment() {
+
+      document.getElementById('main-section').style.display = 'none';
+
+      document.getElementById('payment-section').style.display = 'block';
+
+      window.scrollTo({
+        top:0,
+        behavior:'smooth'
+      });
+    }
+
+    function showMain() {
+
+      document.getElementById('payment-section').style.display = 'none';
+
+      document.getElementById('main-section').style.display = 'block';
+
+      window.scrollTo({
+        top:0,
+        behavior:'smooth'
+      });
+    }
+
+    function showMainAndScroll(sectionId) {
+
+      document.getElementById('payment-section').style.display = 'none';
+
+      document.getElementById('main-section').style.display = 'block';
+
+      setTimeout(() => {
+
+        const section = document.getElementById(sectionId);
+
+        if(section){
+
+          section.scrollIntoView({
+            behavior:'smooth'
+          });
+
+        }
+
+      }, 100);
+    }
+
+    // Copy Wallet
+    function copyAddress(elementId) {
+
+      const el = document.getElementById(elementId);
+
+      const text = el.innerText.replace('Copy','').trim();
+
+      navigator.clipboard.writeText(text).then(() => {
+
+        const btn = el.querySelector('button');
+
+        btn.textContent = 'Copied!';
+
+        setTimeout(() => {
+          btn.textContent = 'Copy';
+        }, 2000);
+
+      });
+    }
+
+    // Donation Form
+    function submitDonation() {
+
+      const name = document.getElementById('name').value.trim();
+
+      const email = document.getElementById('email').value.trim();
+
+      const amount = document.getElementById('amount').value.trim();
+
+      if(name && email && amount){
+
+        alert(`Thank you ${name}! Your donation has been recorded.`);
+
+      }else{
+
+        alert("Please fill all fields.");
+
+      }
+    }
+
+    // Notifications
+    const donorNames = [
+      "James Smith",
+      "Emma Johnson",
+      "Liam Wilson",
+      "Olivia Brown"
+    ];
+
+    function showNotification(){
+
+      const notif = document.getElementById('notification');
+
+      const randomName =
+        donorNames[Math.floor(Math.random() * donorNames.length)];
+
+      const amount =
+        Math.floor(Math.random() * 900) + 100;
+
+      document.getElementById('donor-name').textContent = randomName;
+
+      document.getElementById('donor-amount').textContent =
+        `$${amount}`;
+
+      notif.style.display = 'block';
+
+      setTimeout(() => {
+        notif.style.display = 'none';
+      }, 4000);
+
+    }
+
+    setInterval(showNotification, 7000);
+
+  </script>
+
+</body>
+</html>

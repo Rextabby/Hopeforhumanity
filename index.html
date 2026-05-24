@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hope for Humanity</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #0f172a, #1e2937);
+      color: #fff;
+    }
+
+    /* Running Message */
+    .running-message {
+      background: #22d3ee;
+      color: #0f172a;
+      padding: 3px 0;
+      font-size: 1.35rem;
+      font-weight: bold;
+      text-align: center;
+      overflow: hidden;
+      white-space: nowrap;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+      position: relative;
+      z-index: 100;
+    }
+
+    .running-message span {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 25s linear infinite;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-100%); }
+    }
+
+    .slider-container {
+      position: relative;
+      width: 100%;
+      max-width: 720px;
+      height: 290px;
+      margin: 35px auto;
+      overflow: hidden;
+      background: #000;
+      border-radius: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.7);
+      border: 3px solid rgba(34, 211, 238, 0.3);
+    }
+    .slider { display: flex; transition: transform 1.2s ease-in-out; height: 100%; }
+    .slide { min-width: 100%; height: 100%; position: relative; }
+    .slide img, .slide video { width: 100%; height: 100%; object-fit: cover; }
+    .slide::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, transparent 65%, rgba(15,23,42,0.75) 100%);
+    }
+
+    .slide-text {
+      position: absolute;
+      bottom: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 3;
+      background: rgba(0, 0, 0, 0.5);
+      padding: 8px 18px;
+      border-radius: 8px;
+      border: 1px solid rgba(34, 211, 238, 0.3);
+      max-width: 80%;
+    }
+    .slide-text h2 { 
+      font-size: 1.35rem; 
+      margin: 0; 
+      font-weight: 600;
+      color: #67e8f9;
+    }
+
+    .container { max-width: 900px; margin: 20px auto; padding: 20px; text-align: center; }
+    h1 { color: #22d3ee; font-size: 2.8rem; margin-bottom: 10px; }
+
+    .progress-container {
+      max-width: 720px; margin: 25px auto; background: #1e2937; border-radius: 50px; 
+      padding: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .progress-bar { height: 18px; background: linear-gradient(90deg, #22d3ee, #67e8f9); border-radius: 50px; transition: width 1.8s ease; }
+    .progress-text { display: flex; justify-content: space-between; margin-top: 8px; font-size: 1.1rem; font-weight: 600; }
+
+    .motivational-text { font-size: 1.28rem; line-height: 1.6; max-width: 720px; margin: 25px auto; opacity: 0.95; }
+    .donate-btn {
+      background: #22d3ee; color: #0f172a; font-size: 1.5rem; padding: 16px 55px;
+      border: none; border-radius: 50px; cursor: pointer; margin: 25px 0; font-weight: bold;
+    }
+    .donate-btn:hover { background: #67e8f9; transform: scale(1.05); }
+
+    .work-section, .contact-section { max-width: 900px; margin: 40px auto; padding: 20px; }
+    .work-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+    .work-card { background: #1e2937; border-radius: 12px; padding: 18px; text-align: left; }
+    .work-card h3 { color: #67e8f9; margin-top: 0; }
+
+    .notification {
+      position: fixed; bottom: 20px; right: 20px; background: #14532d; border-left: 5px solid #22c55e;
+      color: #fff; padding: 15px 20px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+      display: none; z-index: 1000; max-width: 340px;
+    }
+
+    /* QR Code Size - Reduced */
+    .qr-code img {
+      width: 200px;
+      height: auto;
+      display: block;
+      margin: 15px auto 0;
+      border: 2px solid #334155;
+      border-radius: 8px;
+    }
+
+    /* Donation Form */
+    .donation-form {
+      background: #1e2937;
+      border-radius: 12px;
+      padding: 25px;
+      max-width: 600px;
+      margin: 30px auto;
+      text-align: left;
+    }
+    .donation-form h3 {
+      color: #67e8f9;
+      margin-top: 0;
+    }
+    .form-group {
+      margin-bottom: 18px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+    .form-group input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      background: #334155;
+      color: #fff;
+      font-size: 1.1rem;
+    }
+    .form-group input:focus {
+      outline: 2px solid #22d3ee;
+    }
+    .submit-btn {
+      background: #22d3ee;
+      color: #0f172a;
+      padding: 14px 40px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+    .submit-btn:hover {
+      background: #67e8f9;
+      transform: scale(1.03);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Running Message -->
+  <div class="running-message">
+    <span>Welcome to HOPE FOR HUMANITY  &nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;Together, we turn compassion into real change &nbsp;&nbsp;&nbsp; ● &nbsp;&nbsp;&nbsp;Thank you for being here. Your presence already brings light
+    </span>
+  </div>
+
+  <!-- Main Page -->
+  <div id="main-section">
+    <div class="slider-container">
+      <div class="slider" id="slider"></div>
+    </div>
+
+    <div class="container">
+      <h1>Hope for Humanity</h1>
+
+      <div class="progress-container">
+        <div class="progress-bar" id="progress-bar" style="width: 42%"></div>
+        <div class="progress-text">
+          <span><strong id="raised-amount">$42,000</strong> raised</span>
+          <span>of <strong>$100,000</strong> goal</span>
+        </div>
+      </div>
+
+      <p class="motivational-text">
+        Every day, millions of children and families face unimaginable suffering — from famine and lack of clean water to devastating disasters. 
+        <strong>Your crypto donation today can save lives, restore hope, and rebuild futures.</strong>
+      </p>
+
+      <button class="donate-btn" onclick="showPayment()">DONATE NOW</button>
+    </div>
+
+    <!-- Our Work So Far -->
+    <div class="work-section container">
+      <h2 style="color:#67e8f9;">Our Work So Far</h2>
+      <div class="work-grid">
+        <div class="work-card">
+          <h3>✅ 12 Water Boreholes</h3>
+          <p>Provided clean water to over 8,500 people in rural communities in East Africa.</p>
+        </div>
+        <div class="work-card">
+          <h3>✅ Emergency Food Aid</h3>
+          <p>Distributed 18 tons of food supplies to families affected by drought and conflict.</p>
+        </div>
+        <div class="work-card">
+          <h3>✅ Medical Support</h3>
+          <p>Supported 3 mobile clinics that treated over 4,200 patients in refugee camps.</p>
+        </div>
+        <div class="work-card">
+          <h3>✅ School Rehabilitation</h3>
+          <p>Rebuilt and equipped 7 schools, giving 2,300 children access to education.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact -->
+    <div class="contact-section">
+      <h2 style="color:#67e8f9;">Get In Touch</h2>
+      <p>We are transparent and always available.</p>
+      
+      <p style="margin:20px 0; font-size:1.2rem;">
+        📞 <strong>WhatsApp:</strong> 
+        <a href="https://wa.me/qr/BISF3EFOJI2XC1?text=Hello%20Hope%20for%20Humanity" target="_blank" style="color:#22c55e; text-decoration:none;">
+          +1 (365) 276-4962
+        </a>
+      </p>
+      <p>📧 Email: <strong>hopeforhumanity.uk@gmail.com
+      </strong></p>
+    </div>
+  </div>
+
+  <!-- ====================== PAYMENT PAGE ====================== -->
+  <div id="payment-section" style="display:none;">
+    <div class="container">
+      <h1>Make Your Crypto Donation</h1>
+      <p style="font-size: 1.25rem;">Thank you for supporting <strong>Hope for Humanity</strong>.<br>Your donation goes directly to humanitarian projects.</p>
+
+      <!-- New Donation Form -->
+      <div class="donation-form">
+        <h3>Record Your Donation</h3>
+        <p style="margin-bottom:20px; opacity:0.9;">Please fill this form after making your payment for accountability and transparency.</p>
+        
+        <div class="form-group">
+          <label for="name">Full Name</label>
+          <input type="text" id="name" placeholder="Enter your full name">
+        </div>
+        
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" placeholder="Enter your email">
+        </div>
+        
+        <div class="form-group">
+          <label for="amount">Amount Paid (USD)</label>
+          <input type="text" id="amount" placeholder="e.g. 150">
+        </div>
+        
+        <button onclick="submitDonation()" class="submit-btn">Submit Donation Record</button>
+      </div>
+
+      <!-- Bitcoin -->
+      <div style="background:#1e2937; border-radius:12px; padding:25px; margin:25px auto; max-width:600px; text-align:left;">
+        <h3>Bitcoin (BTC)</h3>
+        <div class="address" id="btc-address">
+          bc1qx832k7sax2l8v2mvdwdc3htgxazlnymlcm78m3
+          <button class="copy-btn" onclick="copyAddress('btc-address')">Copy</button>
+        </div>
+        <div class="qr-code">
+          <img src="https://raw.githubusercontent.com/Rextabby/Video-and-images/main/btc.jpg" alt="BTC QR Code">
+        </div>
+      </div>
+
+      <!-- Ethereum -->
+      <div style="background:#1e2937; border-radius:12px; padding:25px; margin:25px auto; max-width:600px; text-align:left;">
+        <h3>Ethereum (ETH)</h3>
+        <div class="address" id="eth-address">
+          0xe516f668601CfE869BF861D215c37EF14DDcCc59
+          <button class="copy-btn" onclick="copyAddress('eth-address')">Copy</button>
+        </div>
+        <div class="qr-code">
+          <img src="https://raw.githubusercontent.com/Rextabby/Video-and-images/main/eth.jpg" alt="ETH QR Code">
+        </div>
+      </div>
+
+      <!-- USDT -->
+      <div style="background:#1e2937; border-radius:12px; padding:25px; margin:25px auto; max-width:600px; text-align:left;">
+        <h3>Tether (USDT)</h3>
+         <h3>BNB Smart Chain (Bep20)</h3>
+        <div class="address" id="usdt-address">
+          0xe516f668601cfe869bf861d215c37ef14ddccc59
+          <button class="copy-btn" onclick="copyAddress('usdt-address')">Copy</button>
+        </div>
+        <div class="qr-code">
+          <img src="https://raw.githubusercontent.com/Rextabby/Video-and-images/main/usdt.jpg" alt="USDT QR Code">
+        </div>
+      </div>
+
+      <button onclick="showMain()" style="background:#64748b; color:white; padding:12px 30px; border:none; border-radius:50px; cursor:pointer; margin-top:20px;">← Back to Home</button>
+    </div>
+  </div>
+
+  <!-- Notification -->
+  <div id="notification" class="notification">
+    <strong id="donor-name"></strong> donated <strong id="donor-amount"></strong>
+  </div>
+
+  <script>
+    // Slider
+    const slides = [
+      { type: "image", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/ima2.jpeg", title: "Feeding Hungry Children" },
+      { type: "video", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/v2.mp4", title: "Emergency Food Aid" },
+      { type: "image", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/ima5.jpeg", title: "Clean Water Boreholes" },
+      { type: "video", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/v1.mp4", title: "Providing Clean Water" },
+      { type: "video", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/v3.mp4", title: "Medical & Disaster Relief" },
+      { type: "image", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/ima1.jpeg", title: "Emergency Medical Care" },
+      { type: "image", url: "https://raw.githubusercontent.com/Rextabby/Video-and-images/main/ima4.jpeg", title: "Education for All" }
+    ];
+
+    function createSlides() {
+      const slider = document.getElementById('slider');
+      slider.innerHTML = '';
+      slides.forEach(slide => {
+        const div = document.createElement('div');
+        div.className = 'slide';
+        if (slide.type === "image") {
+          div.innerHTML = `<img src="${slide.url}" alt="${slide.title}"><div class="slide-text"><h2>${slide.title}</h2></div>`;
+        } else {
+          div.innerHTML = `<video autoplay muted loop playsinline><source src="${slide.url}" type="video/mp4"></video><div class="slide-text"><h2>${slide.title}</h2></div>`;
+        }
+        slider.appendChild(div);
+      });
+    }
+
+    let currentSlide = 0;
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      document.getElementById('slider').style.transform = `translateX(-${currentSlide * 100}%)`;
+    }
+
+    createSlides();
+    setInterval(nextSlide, 7000);
+
+    // Large Name List
+    const donorNames = [
+      "James Smith","Emma Johnson","Liam Wilson","Olivia Brown","Noah Martinez","Sophia Garcia","Lucas Anderson",
+      "Isabella Thomas","Mason Taylor","Ava Moore","Ethan Jackson","Mia Harris","Alexander Clark","Charlotte Lewis",
+      "Benjamin Walker","Amelia Hall","Oliver Thompson","Emily White","George Harris","Lily Martin","Harry Robinson",
+      "Grace Wilson","Aarav Sharma","Priya Singh","Arjun Patel","Anika Gupta","Chinedu Okoro","Aisha Bello",
+      "Oluwafemi Adebayo","Ngozi Eze","Mateo Silva","Sofia Santos","Kwame Mensah","Fatima Yusuf","Tyler Scott",
+      "Brooklyn Reed","Jordan Hayes","Taylor Brooks"
+    ];
+
+    let lastIndex = -1;
+
+    function getRandomDonation() {
+      let index = Math.floor(Math.random() * donorNames.length);
+      while (index === lastIndex) index = Math.floor(Math.random() * donorNames.length);
+      lastIndex = index;
+
+      const name = donorNames[index];
+      const amount = Math.floor(Math.random() * 951) + 50;
+      return { name, amount: `$${amount}` };
+    }
+
+    function showNotification() {
+      const notif = document.getElementById('notification');
+      const donation = getRandomDonation();
+      document.getElementById('donor-name').textContent = donation.name;
+      document.getElementById('donor-amount').textContent = donation.amount;
+      notif.style.display = 'block';
+      setTimeout(() => notif.style.display = 'none', 4800);
+    }
+
+    // Page Functions
+    function showPayment() {
+      document.getElementById('main-section').style.display = 'none';
+      document.getElementById('payment-section').style.display = 'block';
+    }
+
+    function showMain() {
+      document.getElementById('payment-section').style.display = 'none';
+      document.getElementById('main-section').style.display = 'block';
+    }
+
+    function copyAddress(elementId) {
+      const el = document.getElementById(elementId);
+      const text = el.innerText.replace('Copy','').trim();
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = el.querySelector('button');
+        const original = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = original, 2000);
+      });
+    }
+
+    // New Form Submit Function
+    function submitDonation() {
+      const name = document.getElementById('name').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const amount = document.getElementById('amount').value.trim();
+
+      if (name && email && amount) {
+        alert(`Thank you ${name}!\nYour donation of $${amount} has been recorded.\nWe appreciate your support.`);
+        // Clear form after submission
+        document.getElementById('name').value = '';
+        document.getElementById('email').value = '';
+        document.getElementById('amount').value = '';
+      } else {
+        alert("Please fill in all fields before submitting.");
+      }
+    }
+
+    // Initialize
+    setInterval(showNotification, 7000);
+    setTimeout(showNotification, 800);
+  </script>
+</body>
+</html>
